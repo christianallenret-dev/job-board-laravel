@@ -15,6 +15,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::resource('applications', \App\Http\Controllers\ApplicationController::class)->middleware('auth');
 });
+
+Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
+Route::get('jobs/{job}', [\App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
+
+Route::middleware('auth', 'verified', 'admin')->group(function () {
+    Route::resource('jobs', \App\Http\Controllers\JobController::class)->except(['index', 'show']);
+});
+
+
 
 require __DIR__.'/auth.php';
