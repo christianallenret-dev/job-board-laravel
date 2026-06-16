@@ -14,14 +14,29 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        $user = $request->user();
+
+        // If already verified
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->intended(
+                route('jobs.index', absolute: false) . '?verified=1'
+            );
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        // Mark email as verified
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
 
-        return redirect()->route('applications.create')->with('success', 'Your email has been verified. You can now create a new application.');
+        // Decide next step based on application existence
+        if ($user->applications()->doesntExist()) {
+            return redirect()
+                ->route('applications.create')
+                ->with('success', 'Your email has been verified. Please create your application.');
+        }
+
+        return redirect()
+            ->route('jobs.index')
+            ->with('success', 'Your email has been verified.');
     }
 }

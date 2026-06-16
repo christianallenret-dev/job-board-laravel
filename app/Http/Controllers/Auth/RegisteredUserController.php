@@ -36,6 +36,17 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Check if user already exists
+        $existingUser = User::where('email', $request->email)->first();
+
+        // If user exists but has not verified their email, throw a validation error
+        // This prevents users from registering with the same email without verifying it first
+        if ($existingUser && !$existingUser->hasVerifiedEmail()) {
+            throw ValidationException::withMessages([
+                'email' => 'This email is already registered but not verified. Please check your inbox and verify your email before logging in.',
+            ]);
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

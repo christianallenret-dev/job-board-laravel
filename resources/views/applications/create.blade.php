@@ -1,21 +1,26 @@
-@extends('layouts.app')
+<x-app-layout>
+    @php($hideNavigation = true)
 
-@section('content')
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            
-            <div class="card border-0 shadow-lg rounded-4">
-                <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                    <h2 class="mb-1 fw-bold">Apply for a Job</h2>
-                    <p class="mb-0 opacity-75">Complete the form below to submit your application.</p>
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-12">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+
+            <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+
+                {{-- HEADER --}}
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+                    <h1 class="text-2xl font-bold">Job Application</h1>
+                    <p class="text-sm text-white/80 mt-1">
+                        Fill out your details carefully before submitting your application
+                    </p>
                 </div>
 
-                <div class="card-body p-5">
+                {{-- BODY --}}
+                <div class="p-8">
 
+                    {{-- ERRORS --}}
                     @if ($errors->any())
-                        <div class="alert alert-danger rounded-3">
-                            <ul class="mb-0">
+                        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
+                            <ul class="list-disc ml-5 space-y-1">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -23,120 +28,89 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('applications.store') }}" method="POST">
+                    <form action="{{ route('applications.store') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <!-- Applicant Name -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">First Name</label>
-                            <input
-                                type="text"
-                                name="first_name"
-                                class="form-control form-control-lg rounded-3"
-                                value="{{ old('first_name') }}"
-                                placeholder="John"
-                                required>
+                        {{-- GRID INPUTS --}}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            {{-- First Name --}}
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                    First Name
+                                </label>
+                                <input type="text" name="first_name"
+                                    value="{{ old('first_name') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-3"
+                                    placeholder="John">
+                            </div>
+
+                            {{-- Last Name --}}
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                    Last Name
+                                </label>
+                                <input type="text" name="last_name"
+                                    value="{{ old('last_name') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-3"
+                                    placeholder="Doe">
+                            </div>
+
+                            {{-- Email --}}
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                    Email Address
+                                </label>
+                                <input type="email" name="email"
+                                    value="{{ old('email') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-3"
+                                    placeholder="john@example.com">
+                            </div>
+
+                            {{-- Degree --}}
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                    Degree
+                                </label>
+                                <input type="text" name="degree"
+                                    value="{{ old('degree') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-3"
+                                    placeholder="BS Information Technology">
+                            </div>
+
+                            {{-- University --}}
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                    University
+                                </label>
+                                <input type="text" name="university"
+                                    value="{{ old('university') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-3"
+                                    placeholder="Your University">
+                            </div>
+
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">Last Name</label>
-                            <input
-                                type="text"
-                                name="last_name"
-                                class="form-control form-control-lg rounded-3"
-                                value="{{ old('last_name') }}"
-                                placeholder="Doe"
-                                required>
-                        </div>
+                        {{-- ACTIONS --}}
+                        <div class="flex items-center justify-between pt-6 border-t border-gray-100">
 
-                        <!-- Email -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">Email Address</label>
-                            <input
-                                type="email"
-                                name="email"
-                                class="form-control form-control-lg rounded-3"
-                                value="{{ old('email') }}"
-                                placeholder="john@example.com"
-                                required>
-                        </div>
-
-                        <!-- Degree -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">Degree</label>
-                            <input
-                                type="text"
-                                name="degree"
-                                class="form-control form-control-lg rounded-3"
-                                value="{{ old('degree') }}"
-                                placeholder="Bachelor of Science in Information Technology"
-                                required>
-                        </div>
-
-                        <!-- University -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">University</label>
-                            <input
-                                type="text"
-                                name="university"
-                                class="form-control form-control-lg rounded-3"
-                                value="{{ old('university') }}"
-                                placeholder="University Name"
-                                required>
-                        </div>
-
-                        <div class="d-flex justify-content-between mt-5">
-                            <a href="{{ route('applications.index') }}"
-                               class="btn btn-outline-secondary px-4 py-2 rounded-3">
-                                Back
+                            <a href="{{ route('jobs.index') }}"
+                               class="text-gray-600 hover:text-gray-900 transition">
+                                ← Back to Jobs
                             </a>
 
                             <button type="submit"
-                                    class="btn btn-primary px-5 py-2 rounded-3 shadow-sm">
+                                class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] transition">
                                 Submit Application
                             </button>
+
                         </div>
 
                     </form>
                 </div>
+
             </div>
 
         </div>
     </div>
-</div>
-
-<style>
-    body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4ecfb 100%);
-        min-height: 100vh;
-    }
-
-    .card {
-        overflow: hidden;
-    }
-
-    .form-control {
-        border: 1px solid #dee2e6;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 0.15rem rgba(13,110,253,.15);
-    }
-
-    .btn-primary {
-        background: linear-gradient(45deg, #0d6efd, #3b82f6);
-        border: none;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        transition: 0.3s;
-    }
-
-    .card-header {
-        background: linear-gradient(45deg, #0d6efd, #3b82f6) !important;
-    }
-</style>
-@endsection
+</x-app-layout>
