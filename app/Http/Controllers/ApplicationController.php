@@ -11,23 +11,24 @@ class ApplicationController extends Controller
     {
         $applications = Application::orderBy('created_at', 'desc')->get(); // Assuming you have an Application model to fetch applications
 
-        return view('application.index', compact('applications'));
+        return view('applications.index', compact('applications'));
     }
 
     public function show(Application $application)
     {
-        return view('application.show', compact('application'));
+        return view('applications.show', compact('application'));
     }
 
     public function create()
     {
-        return view('application.create');
+        return view('applications.create');
     }
 
     public function store(Request $request)
     {
         // Validate and store the application
         $validated = $request->validate([
+            'job_id' => 'required|exists:jobs,id',
             'applicant_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'degree' => 'required|string|max:255',
@@ -36,18 +37,19 @@ class ApplicationController extends Controller
 
         Application::create($validated);
 
-        return redirect()->route('application.index');
+        return redirect()->route('applications.index');
     }
 
     public function edit(Application $application)
     {
-        return view('application.edit', compact('application'));
+        return view('applications.edit', compact('application'));
     }
 
     public function update(Request $request, Application $application)
     {
         // Validate and update the application
         $validated = $request->validate([
+            'job_id' => 'required|exists:jobs,id',
             'applicant_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'degree' => 'required|string|max:255',
@@ -57,7 +59,7 @@ class ApplicationController extends Controller
 
         $application->update($validated);
 
-        return redirect()->route('application.index');
+        return redirect()->route('applications.index');
     }
 
     public function destroy(Application $application)
@@ -65,6 +67,6 @@ class ApplicationController extends Controller
         // Delete the application
         $application->delete();
 
-        return redirect()->route('application.index');
+        return redirect()->route('applications.index');
     }
 }
