@@ -12,21 +12,28 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
+
+// Routes for authenticated users
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('applications', \App\Http\Controllers\ApplicationController::class)->middleware(['auth', 'verified']);
+    Route::resource('applications', \App\Http\Controllers\ApplicationController::class)->except(['index', 'show', 'destroy']);
+
+    Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
+    Route::get('jobs/{job}', [\App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
 });
 
-Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
-Route::get('jobs/{job}', [\App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
-
+// Admin routes
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::resource('jobs', \App\Http\Controllers\JobController::class)->except(['index', 'show']);
+
+    Route::get('/applications', [\App\Http\Controllers\ApplicationController::class, 'index'])->name('applications.index');
+    Route::get('/applications/{application}', [\App\Http\Controllers\ApplicationController::class, 'show'])->name('applications.show');
+    Route::delete('/applications/{application}', [\App\Http\Controllers\ApplicationController::class, 'destroy'])->name('applications.destroy');    
 });
 
 Route::get('/verify-email', EmailVerificationPromptController::class)

@@ -26,27 +26,26 @@
                     <form action="{{ route('applications.store') }}" method="POST">
                         @csrf
 
-                        <!-- Job ID -->
+                        <!-- Applicant Name -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Job ID</label>
+                            <label class="form-label fw-semibold">First Name</label>
                             <input
-                                type="number"
-                                name="job_id"
+                                type="text"
+                                name="first_name"
                                 class="form-control form-control-lg rounded-3"
-                                value="{{ old('job_id') }}"
-                                placeholder="Enter Job ID"
+                                value="{{ old('first_name') }}"
+                                placeholder="John"
                                 required>
                         </div>
 
-                        <!-- Applicant Name -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Applicant Name</label>
+                            <label class="form-label fw-semibold">Last Name</label>
                             <input
                                 type="text"
-                                name="applicant_name"
+                                name="last_name"
                                 class="form-control form-control-lg rounded-3"
-                                value="{{ old('applicant_name') }}"
-                                placeholder="John Doe"
+                                value="{{ old('last_name') }}"
+                                placeholder="Doe"
                                 required>
                         </div>
 

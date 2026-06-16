@@ -11,17 +11,19 @@ class JobController extends Controller
     {
         $jobs = Job::orderBy('created_at', 'desc')->get(); // Assuming you have a Job model to fetch job postings
 
-        return view('job.index', compact('jobs'));
+        return view('jobs.index', compact('jobs'));
     }
 
     public function show(Job $job)
     {
-        return view('job.show', compact('job'));
+        $job->load('applications.user'); // Load applications related to the job
+
+        return view('jobs.show', compact('job'));
     }
 
     public function create()
     {
-        return view('job.create');
+        return view('jobs.create');
     }
 
     public function store(Request $request)
@@ -31,6 +33,8 @@ class JobController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'location' => 'required|string|max:255',
+            'salary' => 'required|numeric',
+            'type' => 'required',
             'company' => 'required|string|max:255',
         ]);
 
@@ -41,7 +45,7 @@ class JobController extends Controller
 
     public function edit(Job $job)
     {
-        return view('job.edit', compact('job'));
+        return view('jobs.edit', compact('job'));
     }
 
     public function update(Request $request, Job $job)
