@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('job_id')->constrained('job_board')->onDelete('cascade');
+            $table->foreignId('job_id')->nullable()->constrained('job_board')->onDelete('cascade');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');

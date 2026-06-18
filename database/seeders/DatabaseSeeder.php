@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Job;
+use App\Models\Application;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,9 +19,31 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
+        $admin = User::factory()->create([
+            'name' => 'Admin',
             'email' => 'test@example.com',
+            'role' => 'admin',
         ]);
+
+        // Create 19 regular users
+        $users = User::factory(19)->create();
+
+        // Jobs
+       $jobs = Job::factory(15)->create();
+
+        // Combine admin + users
+        $allUsers = collect([$admin])->merge($users);
+
+        // One application per user
+        foreach ($allUsers as $user) {
+            Application::factory()->create([
+                'user_id' => $user->id,
+                // 70% chance of having a job assigned
+                'job_id' => fake()->boolean(70)
+                    ? $jobs->random()->id
+                    : null,
+                'email' => $user->email,
+            ]);
+        }
     }
 }

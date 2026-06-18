@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\VerifyEmailController;
@@ -20,22 +22,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::resource('applications', \App\Http\Controllers\ApplicationController::class)->except(['index', 'show', 'destroy']);
-
-    Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
-    Route::get('jobs/{job}', [\App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
 });
 
-// Admin routes
+// Authenticated + verified users
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::resource('applications', ApplicationController::class)
+        ->except(['index', 'destroy']);
+
+    Route::get('/jobs', [JobController::class, 'index'])
+        ->name('jobs.index');
+
+    Route::get('/jobs/{job}', [JobController::class, 'show'])
+    ->whereNumber('job')
+        ->name('jobs.show');
+});
+
+// Admin only
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
-    Route::resource('jobs', \App\Http\Controllers\JobController::class)->except(['index', 'show']);
 
-    Route::get('/applications', [\App\Http\Controllers\ApplicationController::class, 'index'])->name('applications.index');
-    Route::get('/applications/{application}', [\App\Http\Controllers\ApplicationController::class, 'show'])->name('applications.show');
-    Route::delete('/applications/{application}', [\App\Http\Controllers\ApplicationController::class, 'destroy'])->name('applications.destroy');    
+    Route::resource('jobs', JobController::class)
+        ->except(['index', 'show']);
+
+    Route::resource('applications', ApplicationController::class)
+        ->only(['index', 'show', 'destroy']);
 });
 
+// Email verification routes
 Route::get('/verify-email', EmailVerificationPromptController::class)
     ->middleware('auth')
     ->name('verification.notice');
