@@ -1,20 +1,22 @@
-```blade
 <x-app-layout>
+
     <x-slot name="header">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900">
+        <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
                 Edit Job
             </h2>
-            <p class="text-sm text-gray-500 mt-1">
+
+            <p class="text-sm text-slate-500 dark:text-slate-400">
                 Update the details of this job listing
             </p>
         </div>
     </x-slot>
 
-    <div class="py-10">
+    <div class="py-10 bg-slate-50 dark:bg-slate-950 min-h-screen">
+
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm p-8">
 
                 <form action="{{ route('jobs.update', $job) }}"
                       method="POST"
@@ -23,116 +25,106 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Job Title -->
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 mb-2">
-                            Job Title
-                        </label>
+                    <!-- Grid Inputs -->
+                    <div class="grid md:grid-cols-2 gap-6">
 
-                        <input
-                            type="text"
-                            name="title"
-                            value="{{ old('title', $job->title) }}"
-                            class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                        <!-- Job Title -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                Job Title
+                            </label>
 
-                        @error('title')
-                            <p class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
+                            <input type="text"
+                                   name="title"
+                                   value="{{ old('title', $job->title) }}"
+                                   class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white
+                                          focus:border-indigo-500 focus:ring-indigo-500 transition">
 
-                    <!-- Company -->
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 mb-2">
-                            Company
-                        </label>
+                            @error('title')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                        <input
-                            type="text"
-                            name="company"
-                            value="{{ old('company', $job->company) }}"
-                            class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                        <!-- Company -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                Company
+                            </label>
 
-                        @error('company')
-                            <p class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
+                            <input type="text"
+                                   name="company"
+                                   value="{{ old('company', $job->company) }}"
+                                   class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white
+                                          focus:border-indigo-500 focus:ring-indigo-500 transition">
 
-                    <!-- Location -->
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 mb-2">
-                            Location
-                        </label>
+                            @error('company')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                        <input
-                            type="text"
-                            name="location"
-                            value="{{ old('location', $job->location) }}"
-                            class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                        <!-- Location -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                Location
+                            </label>
 
-                        @error('location')
-                            <p class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
+                            <input type="text"
+                                   name="location"
+                                   value="{{ old('location', $job->location) }}"
+                                   class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white
+                                          focus:border-indigo-500 focus:ring-indigo-500 transition">
 
-                    <!-- Salary -->
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 mb-2">
-                            Salary
-                        </label>
+                            @error('location')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                        <input
-                            type="number"
-                            name="salary"
-                            value="{{ old('salary', $job->salary) }}"
-                            class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                        <!-- Salary -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                Salary
+                            </label>
 
-                        @error('salary')
-                            <p class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                            <input type="number"
+                                   name="salary"
+                                   value="{{ old('salary', $job->salary) }}"
+                                   class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white
+                                          focus:border-indigo-500 focus:ring-indigo-500 transition">
+
+                            @error('salary')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                     </div>
 
                     <!-- Description -->
                     <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 mb-2">
-                            Description
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                            Job Description
                         </label>
 
                         <textarea
                             name="description"
                             rows="6"
-                            class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">{{ old('description', $job->description) }}</textarea>
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white
+                                   focus:border-indigo-500 focus:ring-indigo-500 transition resize-none">{{ old('description', $job->description) }}</textarea>
 
                         @error('description')
-                            <p class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Buttons -->
-                    <div class="flex justify-end gap-3 pt-4">
+                    <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4">
 
                         <a href="{{ route('jobs.show', $job) }}"
-                           class="px-5 py-2.5 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+                           class="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-center">
                             Cancel
                         </a>
 
-                        <button
-                            type="submit"
-                            class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition">
+                        <button type="submit"
+                                class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-sm transition">
                             Update Job
                         </button>
 
@@ -143,6 +135,7 @@
             </div>
 
         </div>
+
     </div>
+
 </x-app-layout>
-```

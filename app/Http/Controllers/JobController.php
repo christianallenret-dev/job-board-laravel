@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Job;
+use App\Models\Application;
 
 class JobController extends Controller
 {
@@ -16,7 +18,12 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        $job->load('applications.user'); // Load applications related to the job
+        $job->load([
+            'applications' => function ($query) {
+                $query->latest();
+            },
+            'applications.user'
+        ]); // Load applications related to the job
 
         return view('jobs.show', compact('job'));
     }
@@ -61,6 +68,42 @@ class JobController extends Controller
         $job->update($validated);
 
         return redirect()->route('jobs.index');
+    }
+
+    public function apply(Job $job)
+    {
+        $user = Auth::user();
+
+        // Prevent admin from applying
+        if ($user->isAdmin()) {
+            return back()->with('error', 'Admins cannot apply for jobs.');
+        }
+
+        // Prevent duplicate applications (faster + cleaner)
+        $exists = $job->applications()
+            ->where('user_id', $user->id)
+            ->exists();
+
+        if ($exists) {
+            return back()->with('error', 'You already applied for this job.');
+        }
+
+        $nameParts = explode(' ', $user->name, 2);
+
+        Application::create([
+            'user_id' => $user->id,
+            'job_id' => $job->id,
+
+            'first_name' => $nameParts[0],
+            'last_name' => $nameParts[1] ?? '',
+
+            'email' => $user->email,
+            'degree' => 'Not Provided',
+            'university' => 'Not Provided',
+            'description' => 'Application submitted via job portal',
+        ]);
+
+        return back()->with('success', 'Application submitted successfully!');
     }
 
     public function destroy(Job $job)

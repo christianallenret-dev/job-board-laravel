@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-gray-100 dark:bg-slate-950">
             @if (request()->routeIs('applications.create'))
                 {{-- no navigation --}}
             @else
@@ -24,12 +24,28 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
+                <header>
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
+
+            @if (session('success'))
+                <div class="max-w-7xl mx-auto mt-4 px-4">
+                    <div class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 p-3 rounded-lg shadow">
+                        {{ session('success') }}
+                    </div>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="max-w-7xl mx-auto mt-4 px-4">
+                    <div class="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 p-3 rounded-lg shadow">
+                        {{ session('error') }}
+                    </div>
+                </div>
+            @endif
 
             <!-- Page Content -->
             <main>

@@ -36,6 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/jobs/{job}', [JobController::class, 'show'])
     ->whereNumber('job')
         ->name('jobs.show');
+
+    // Apply to job (USER ACTION)
+    Route::post('/jobs/{job}/apply', [JobController::class, 'apply'])
+        ->name('jobs.apply');
 });
 
 // Admin only
